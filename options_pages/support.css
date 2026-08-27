@@ -1,0 +1,136 @@
+/* ============================================================
+   EditThisCookie — support page (Claude Orange glass)
+   ============================================================ */
+
+.linkify {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  margin: 14px 0;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(16px) saturate(1.3);
+  color: var(--ink-2);
+  font-size: 13px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.linkify:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--accent-border);
+  color: var(--ink);
+}
+
+.linkify i {
+  flex: 0 0 auto;
+}
+
+.linkify .section-title {
+  margin-bottom: 4px;
+}
+
+hr {
+  display: none;
+}
+
+.donate-button {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 8px 16px;
+  margin-left: 10px;
+  box-shadow: var(--shadow-soft);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.donate-button:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--accent-border);
+}
+
+#paypal-slider {
+  clear: both;
+  float: left;
+  max-width: 400px;
+  width: 60%;
+}
+
+#paypal-amount {
+  float: left;
+  width: 210px;
+  height: 30px;
+  margin-top: -4px;
+  margin-left: 15px;
+}
+
+#paypal-custom-amount {
+  float: left;
+  margin-top: -1px;
+}
+
+#donation-buttons-container {
+  float: right;
+  margin-top: -80px;
+}
+
+#donation-buttons-container > div {
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+#paypal-donate-button {
+  border-bottom: 1px solid var(--glass-line);
+}
+
+#paypal-benefits {
+  clear: both;
+  margin-right: 120px;
+  padding-top: 0;
+  font-size: 110%;
+}
+
+#benefits-list {
+  list-style-type: square;
+  padding-left: 20px;
+}
+
+.benefit-unmatched {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+li#support-chooser {
+  color: #e5484d;
+}
+
+li#support-chooser > img {
+  margin-left: -18px;
+}
+
+li#support-chooser:hover {
+  color: #f06068;
+}
+
+li#support-chooser.selected {
+  -webkit-border-start-color: #e5484d;
+  color: #e5484d;
+}
+
+.table {
+  width: auto !important;
+  margin-left: 30px;
+}
+
+.table_row div {
+  height: 1.3em;
+}
+
+.table_data:hover {
+  background-color: var(--accent-softer);
+}

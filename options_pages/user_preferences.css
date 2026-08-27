@@ -1,0 +1,158 @@
+/* ============================================================
+   EditThisCookie — user preferences (Claude Orange glass)
+   ============================================================ */
+
+hr:first-of-type {
+  margin-bottom: 22px;
+}
+
+.disabled {
+  color: var(--muted) !important;
+  opacity: 0.7;
+}
+
+#maxDateType {
+  display: inline-block;
+}
+
+#maxDateContainer {
+  flex-wrap: wrap;
+}
+
+#maxDateContainer .ui-icon {
+  margin-top: 0 !important;
+}
+
+#maxDate {
+  width: 60px;
+}
+
+/* jQuery UI checkboxradio group (buttonset in 1.12 → controlgroup) */
+#maxDateType .ui-button {
+  height: 30px !important;
+  margin-right: 8px !important;
+  padding: 0 16px !important;
+  border: 1px solid var(--glass-line) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  background-image: none !important;
+  color: var(--ink-2) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+#maxDateType .ui-button:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: var(--accent-border) !important;
+  color: var(--accent) !important;
+}
+
+#maxDateType .ui-button.ui-state-active {
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    var(--accent-hover)
+  ) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  box-shadow: var(--shadow-accent) !important;
+}
+
+/* hide the checkboxradio dot icon — the pill state is the indicator */
+#maxDateType .ui-checkboxradio-icon,
+#maxDateType .ui-checkboxradio-icon-space {
+  display: none;
+}
+
+.ui-button.ui-widget {
+  height: 22px !important;
+}
+
+.ui-button-text {
+  margin-top: -3px !important;
+}
+
+.ui-state-active {
+  font-weight: bold;
+}
+
+/* Save button */
+#saveMaxDateButton {
+  display: inline-block;
+  max-width: 90px;
+  margin-left: 18px;
+  padding: 6px 20px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: var(--shadow-accent);
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+#saveMaxDateButton:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+#saveMaxDateButton.ui-state-disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Inline dash bullets (ui-icon) → small accent tick
+   (scoped to .formLine direct children so checkboxradio icons
+   inside the maxDateType pills are left untouched) */
+.formLine > span.ui-icon {
+  float: none;
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  margin: 0 4px 0 0;
+  border-radius: 2px;
+  background: var(--accent) !important;
+  background-image: none !important;
+  text-indent: -9999px;
+}
+
+#shortenProgress {
+  display: inline-block;
+  height: 25px;
+  margin-left: 18px;
+}
+
+#shortenProgress i {
+  color: var(--accent);
+}
+
+#shortenProgress span {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 95%;
+  color: var(--muted);
+}
+
+.benefit-unmatched {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.table {
+  width: auto !important;
+  margin: 0 0 15px 30px;
+}
+
+.table_row div {
+  height: 1.3em;
+}
+
+.table_data:hover {
+  background-color: var(--accent-softer);
+}

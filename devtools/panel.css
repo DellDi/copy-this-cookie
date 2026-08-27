@@ -1,0 +1,208 @@
+/* ============================================================
+   EditThisCookie — devtools panel (Claude Orange glass)
+   ============================================================ */
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#sidebar {
+  display: none;
+  float: left;
+  width: 210px;
+  height: calc(100% - 20px);
+  margin: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--glass-border);
+  border-right: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px) saturate(1.35);
+}
+
+#main {
+  float: none;
+  width: auto;
+  height: calc(100% - 20px);
+  margin: 10px 10px 10px 230px;
+  background: transparent;
+}
+
+.datagrid {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px) saturate(1.35);
+  overflow: auto;
+  height: 100%;
+}
+
+.datagrid table {
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+  margin: 0;
+}
+
+.datagrid table td,
+.datagrid table th {
+  padding: 6px 12px;
+}
+
+.datagrid table thead th {
+  background: var(--accent-softer) !important;
+  background-image: none !important;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-left: none;
+  border-bottom: 1px solid var(--glass-line);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.datagrid table thead th:first-child {
+  border: none;
+}
+
+.datagrid table tbody td {
+  color: var(--ink-2);
+  border-left: none;
+  border-bottom: 1px solid var(--glass-line);
+  font-size: 12px;
+  font-weight: 400;
+  background: transparent !important;
+}
+
+.datagrid table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.32) !important;
+  color: var(--ink);
+}
+
+.datagrid table tbody td:first-child {
+  border-left: none;
+}
+
+.datagrid table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.datagrid table tbody tr:hover {
+  background: var(--accent-softer) !important;
+}
+
+.datagrid table tbody tr:hover td {
+  color: var(--ink);
+}
+
+/* Tablesorter header sort arrows → orange */
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+  background-image: none !important;
+}
+
+.tablesorter-default .headerSortUp,
+.tablesorter-default .tablesorter-headerSortUp {
+  background-image: none !important;
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.tablesorter-default .headerSortDown,
+.tablesorter-default .tablesorter-headerSortDown {
+  background-image: none !important;
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.minColumn {
+  width: 1px;
+}
+
+.medColumn {
+  width: 200px;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+.hiddenColumn {
+  display: none;
+}
+
+tr td {
+  width: auto;
+  max-width: 1px;
+  /* Fix for tablesorter not resizing well columns */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+tr td:nth-of-type(3) textarea {
+  min-height: 50px;
+}
+
+tr td:nth-of-type(6) textarea {
+  min-height: 50px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Inline cell editors (jEditable) */
+.datagrid td input[type="text"],
+.datagrid td textarea,
+.datagrid td select {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.datagrid td input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.disabled {
+  color: var(--muted) !important;
+}
+
+#beta_alter {
+  position: fixed;
+  display: table;
+  vertical-align: middle;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 30px;
+  background: var(--accent-soft);
+  border-top: 1px solid var(--accent-border);
+  text-align: center;
+  color: var(--ink);
+  backdrop-filter: blur(10px);
+}
+
+#beta_alter > div {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#beta_alter a {
+  color: var(--accent);
+}

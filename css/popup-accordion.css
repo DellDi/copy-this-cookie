@@ -1,0 +1,128 @@
+/* ============================================================
+   EditThisCookie — accordion (Claude Orange glass)
+   ============================================================ */
+
+.ui-accordion-header {
+  position: relative;
+  margin: 0 !important;
+  padding: 12px 42px 12px 16px !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(16px) saturate(1.3);
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: background 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ui-accordion-header:hover {
+  background: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Active (expanded) header */
+.ui-accordion-header.ui-state-active {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 244, 238, 0.72)
+  ) !important;
+  border-color: var(--accent-border) !important;
+  border-radius: 14px 14px 0 0 !important;
+  box-shadow: 0 10px 28px rgba(217, 119, 87, 0.13);
+}
+
+.ui-accordion-header a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ui-accordion-header b {
+  font-weight: 700;
+}
+
+.ui-accordion-header p {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ui-accordion-header p span {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 11.5px;
+}
+
+/* Custom chevron replaces the jquery-ui sprite icon */
+.ui-accordion-header .ui-accordion-header-icon {
+  display: none;
+}
+
+.ui-accordion-header::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border: solid var(--muted);
+  border-width: 0 2px 2px 0;
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.ui-accordion-header.ui-state-active::after {
+  transform: translateY(-30%) rotate(225deg);
+  border-color: var(--accent);
+}
+
+/* Content panel */
+.ui-accordion-content {
+  margin-top: -1px;
+  padding: 14px !important;
+  background: rgba(255, 255, 255, 0.42) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.62) !important;
+  border-radius: 0 0 14px 14px !important;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(14px) saturate(1.25);
+  color: var(--ink);
+  font-size: 12px;
+  overflow: visible !important;
+}
+
+.ui-accordion-content p,
+.ui-accordion-content label {
+  color: var(--ink-2);
+}
+
+/* Cookie detail panels inside the list get room for the
+   absolute-positioned vertical command chips */
+#cookiesList .ui-accordion-content.cookie {
+  padding-left: 52px !important;
+}
+
+/* Static panels (new cookie / paste / filter) — same glass look
+   as accordion content, but without the ui-accordion-content class */
+#newCookie > .cookie,
+#pasteCookie > .cookie,
+#cookieFilter > .cookie {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.42) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.62) !important;
+  border-radius: 0 0 14px 14px !important;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(14px) saturate(1.25);
+  color: var(--ink);
+  font-size: 12px;
+}

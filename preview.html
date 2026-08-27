@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>EditThisCookie — Glass theme preview</title>
+    <!-- popup css chain (same order as popup.html) -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/css/smoothness/jquery-ui-1.12.1.custom.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/lib/uniform/uniform.default.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/opensans/opensans.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/css/font-awesome-4.6.3/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/popup.css" />
+    <link rel="stylesheet" type="text/css" href="/css/popup-accordion.css" />
+    <!-- options css chain -->
+    <link rel="stylesheet" type="text/css" href="/css/options_main_page.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/options_pages/user_preferences.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/options_pages/block_rules.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/options_pages/support.css" />
+    <!-- shared theme (last) -->
+    <link rel="stylesheet" type="text/css" href="/css/theme.css" />
+
+    <style>
+      /* ---- preview-only scoping ---- */
+      body {
+        width: auto;
+        min-height: auto;
+        padding: 48px 40px 80px;
+        font-size: 14px;
+        overflow: visible;
+      }
+      .preview-section {
+        max-width: 1020px;
+        margin: 0 auto 64px;
+      }
+      .preview-section > h2 {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 18px;
+      }
+      /* popup container mimics popup body */
+      .preview-popup {
+        width: 550px;
+        margin: 0 auto;
+        padding: 12px 14px 64px;
+        box-sizing: border-box;
+        font-size: 12px;
+        border-radius: 20px;
+        box-shadow: 0 24px 70px rgba(31, 30, 29, 0.16);
+      }
+      /* show alert + toast inline instead of fixed overlays */
+      #alert_wrapper {
+        position: relative;
+        display: block;
+        height: auto;
+        margin-top: 16px;
+      }
+      #alert_background {
+        display: none;
+      }
+      #alert_box {
+        margin: 0 auto;
+      }
+      .toast {
+        position: relative;
+        display: block;
+        top: auto;
+        left: auto;
+        margin: 16px auto 0;
+      }
+      #submitDiv {
+        position: relative;
+        display: block;
+        margin-top: 16px;
+        border-radius: 14px;
+      }
+      /* preview-only: neutralize block_rules.css #submitButton (not
+         loaded by the real popup) so the popup's pill button shows */
+      #submitButton {
+        border-radius: 999px !important;
+        padding: 0 22px 0 18px !important;
+        height: 44px !important;
+      }
+      /* options section: navigation inline instead of fixed */
+      .preview-options {
+        position: relative;
+        margin-left: 220px;
+        min-height: 420px;
+      }
+      .preview-options #navigation {
+        position: absolute;
+        top: 0;
+        left: -206px;
+        height: auto;
+      }
+      .preview-options .box {
+        margin-left: 0;
+        padding: 0;
+        max-width: none;
+      }
+      .preview-rules {
+        position: relative;
+        margin-left: 0;
+      }
+      .preview-rules #navigation {
+        display: none;
+      }
+      .preview-rules .box {
+        margin-left: 0;
+        padding: 0;
+        max-width: none;
+      }
+      #newRule.popup {
+        display: block;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 24px auto 0;
+      }
+      .preview-support .box {
+        margin-left: 0;
+        padding: 0;
+        max-width: none;
+      }
+    </style>
+  </head>
+
+  <body class="unselectable">
+    <!-- ================= POPUP ================= -->
+    <section class="preview-section">
+      <h2>Popup</h2>
+      <div class="preview-popup">
+        <div id="wrapper">
+          <div id="siteHeader">
+            <div id="siteTitle">
+              <i class="fa fa-globe"></i>
+              <span id="siteHostname">example.com</span>
+            </div>
+            <div id="siteStats">
+              <span class="stat-chip" id="statTotal"><b>5</b>cookies</span>
+              <span class="stat-chip stat-protected" id="statProtected"><b>1</b>protected</span>
+            </div>
+          </div>
+
+          <div id="firstRunBanner">
+            <i class="fa fa-lightbulb-o"></i>
+            <span
+              >Tip: edit any cookie below, then press
+              <b>Save</b> at the bottom to apply your changes.</span
+            >
+            <a id="firstRunClose"><i class="fa fa-times"></i></a>
+          </div>
+
+          <div id="searchBox">
+            <input type="text" id="searchField" value="" placeholder="Search…" />
+          </div>
+
+          <div class="commands-table">
+            <div class="commands-row commands-row-texy">
+              <a id="backToList" style="display: none"
+                ><i class="fa fa-arrow-left"></i><span>Back</span></a
+              >
+              <a id="deleteAllButton" class="notOnEmpty"
+                ><i class="fa fa-trash-o"></i><span>Delete all</span></a
+              >
+              <a id="refreshButton"><i class="fa fa-undo"></i><span>Reset</span></a>
+              <a id="addCookieButton"
+                ><i class="fa fa-plus"></i><span>New</span></a
+              >
+              <a id="pasteButton"
+                ><i class="fa fa-sign-in"></i><span>Paste</span></a
+              >
+              <a id="copyButton" class="notOnEmpty"
+                ><i class="fa fa-sign-out"></i><span>Copy</span></a
+              >
+              <a id="searchButton" class="notOnEmpty"
+                ><i class="fa fa-search"></i><span>Search</span></a
+              >
+              <a id="optionsButton"><i class="fa fa-wrench"></i><span>Options</span></a>
+            </div>
+          </div>
+
+          <div id="cookieSearchCondition">
+            <input
+              class="searchCondition"
+              type="text"
+              placeholder="https://example.com"
+              value="https://example.com"
+            />
+          </div>
+
+          <div id="cookiesList">
+            <h3>
+              <a href="#"
+                ><p><b>__cf_bm</b><span> | .example.com</span></p></a
+              >
+            </h3>
+            <div class="cookie">
+              <div class="vertical-commands-row">
+                <a class="deleteOne"><i class="fa fa-trash-o"></i></a>
+                <a class="protectOne unprotected"><i class="fa fa-unlock"></i></a>
+                <a class="protectOne protected" style="display: none"
+                  ><i class="fa fa-lock"></i
+                ></a>
+                <a class="flagOne"><i class="fa fa-ban"></i></a>
+              </div>
+              <input type="hidden" class="index" value="0" />
+              <input type="hidden" class="name" value="__cf_bm" />
+              <div class="cookie-table">
+                <label class="formLabel">Value</label>
+                <div>
+                  <textarea rows="3" class="value input" spellcheck="false">a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6</textarea>
+                </div>
+                <label class="formLabel">Domain</label>
+                <input class="domain input" type="text" value=".example.com" />
+                <label class="formLabel">Path</label>
+                <input class="path input" type="text" value="/" />
+                <label class="formLabel">Expiration</label>
+                <input class="expiration input" type="text" value="Fri, 27 Aug 2027 14:30:00 GMT" />
+                <label class="formLabel">SameSite</label>
+                <select class="sameSite input">
+                  <option value="no_restriction">No restriction</option>
+                  <option value="lax" selected>Lax</option>
+                  <option value="strict">Strict</option>
+                </select>
+              </div>
+              <div class="cookie-row" style="margin-top: 5px">
+                <div>
+                  <label class="formLabel">Host only</label>
+                  <input class="hostOnly checkbox" type="checkbox" />
+                </div>
+                <div>
+                  <label class="formLabel">Session</label>
+                  <input class="session checkbox" type="checkbox" />
+                </div>
+                <div>
+                  <label class="formLabel">Secure</label>
+                  <input class="secure checkbox" type="checkbox" checked />
+                </div>
+                <div>
+                  <label class="formLabel">HttpOnly</label>
+                  <input class="httpOnly checkbox" type="checkbox" checked />
+                </div>
+              </div>
+            </div>
+
+            <h3>
+              <a href="#"
+                ><p><b>sessionid</b><span> | .example.com</span></p></a
+              >
+            </h3>
+            <div class="cookie">
+              <div class="vertical-commands-row">
+                <a class="deleteOne"><i class="fa fa-trash-o"></i></a>
+                <a class="protectOne unprotected"><i class="fa fa-unlock"></i></a>
+                <a class="protectOne protected" style="display: none"
+                  ><i class="fa fa-lock"></i
+                ></a>
+                <a class="flagOne"><i class="fa fa-ban"></i></a>
+              </div>
+              <input type="hidden" class="index" value="1" />
+              <input type="hidden" class="name" value="sessionid" />
+              <div class="cookie-table">
+                <label class="formLabel">Value</label>
+                <div>
+                  <textarea rows="3" class="value input" spellcheck="false">q7w8e9r0t1y2u3i4o5p6a7s8d9f0g1h2j3k4l5z6x7c8v9b0n1m2</textarea>
+                </div>
+                <label class="formLabel">Domain</label>
+                <input class="domain input" type="text" value=".example.com" />
+                <label class="formLabel">Path</label>
+                <input class="path input" type="text" value="/" />
+                <label class="formLabel">Expiration</label>
+                <input class="expiration input" type="text" disabled value="Session" />
+                <label class="formLabel">SameSite</label>
+                <select class="sameSite input">
+                  <option value="no_restriction">No restriction</option>
+                  <option value="lax" selected>Lax</option>
+                  <option value="strict">Strict</option>
+                </select>
+              </div>
+              <div class="cookie-row" style="margin-top: 5px">
+                <div>
+                  <label class="formLabel">Host only</label>
+                  <input class="hostOnly checkbox" type="checkbox" checked />
+                </div>
+                <div>
+                  <label class="formLabel">Session</label>
+                  <input class="session checkbox" type="checkbox" checked />
+                </div>
+                <div>
+                  <label class="formLabel">Secure</label>
+                  <input class="secure checkbox" type="checkbox" checked />
+                </div>
+                <div>
+                  <label class="formLabel">HttpOnly</label>
+                  <input class="httpOnly checkbox" type="checkbox" checked />
+                </div>
+              </div>
+            </div>
+
+            <h3>
+              <a href="#"
+                ><p><b style="color: #2e9e44">_ga</b><span> | .google.com</span></p></a
+              >
+            </h3>
+            <div class="cookie">
+              <div class="vertical-commands-row">
+                <a class="deleteOne"><i class="fa fa-trash-o"></i></a>
+                <a class="protectOne unprotected" style="display: none"
+                  ><i class="fa fa-unlock"></i
+                ></a>
+                <a class="protectOne protected"><i class="fa fa-lock"></i></a>
+                <a class="flagOne"><i class="fa fa-ban"></i></a>
+              </div>
+              <input type="hidden" class="index" value="2" />
+              <input type="hidden" class="name" value="_ga" />
+              <div class="cookie-table">
+                <label class="formLabel">Value</label>
+                <div>
+                  <textarea rows="3" class="value input" spellcheck="false">GA1.2.1234567890.1612345678</textarea>
+                </div>
+                <label class="formLabel">Domain</label>
+                <input class="domain input" type="text" value=".google.com" />
+                <label class="formLabel">Path</label>
+                <input class="path input" type="text" value="/" />
+                <label class="formLabel">Expiration</label>
+                <input class="expiration input" type="text" value="Fri, 27 Aug 2027 14:30:00 GMT" />
+                <label class="formLabel">SameSite</label>
+                <select class="sameSite input">
+                  <option value="no_restriction" selected>No restriction</option>
+                  <option value="lax">Lax</option>
+                  <option value="strict">Strict</option>
+                </select>
+              </div>
+              <div class="cookie-row" style="margin-top: 5px">
+                <div>
+                  <label class="formLabel">Host only</label>
+                  <input class="hostOnly checkbox" type="checkbox" />
+                </div>
+                <div>
+                  <label class="formLabel">Session</label>
+                  <input class="session checkbox" type="checkbox" />
+                </div>
+                <div>
+                  <label class="formLabel">Secure</label>
+                  <input class="secure checkbox" type="checkbox" />
+                </div>
+                <div>
+                  <label class="formLabel">HttpOnly</label>
+                  <input class="httpOnly checkbox" type="checkbox" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- new cookie panel (static header, like the real popup) -->
+          <div id="newCookie" class="ui-accordion ui-widget ui-accordion-icons">
+            <h3
+              class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons ui-state-focus"
+            >
+              <span
+                class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"
+              ></span>
+              <a href="#">Add new cookie</a>
+            </h3>
+            <div class="cookie">
+              <div class="cookie-table" style="margin-left: 0; width: 100%">
+                <label class="formLabel">Name</label>
+                <input class="name input" type="text" value="theme" />
+                <label class="formLabel">Value</label>
+                <div>
+                  <textarea rows="4" class="value input" spellcheck="false">dark</textarea>
+                </div>
+                <label class="formLabel">Domain</label>
+                <input class="domain input" type="text" value="example.com" />
+                <label class="formLabel">Path</label>
+                <input class="path input" type="text" value="/" />
+                <label class="formLabel">Expiration</label>
+                <input class="expiration input" type="text" value="Fri, 27 Aug 2027 14:30:00 GMT" />
+                <label class="formLabel">SameSite</label>
+                <select class="sameSite input">
+                  <option value="no_restriction" selected>No restriction</option>
+                  <option value="lax">Lax</option>
+                  <option value="strict">Strict</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- alert dialog (shown inline for preview) -->
+          <div id="alert_wrapper">
+            <div id="alert_background"></div>
+            <div id="alert_box">
+              <div id="alert_title">
+                <p id="alert_title_p">Delete 3 cookies?</p>
+              </div>
+              <div id="alert_buttons">
+                <div id="alert_ok" class="alert_button">OK</div>
+                <div id="alert_cancel" class="alert_button">Cancel</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- toast (shown inline for preview) -->
+          <div id="copiedToast" class="toast">Copied to clipboard</div>
+
+          <div id="submitDiv">
+            <i id="submitButton" class="fa fa-check"><span>Save all changes</span></i>
+            <a id="helpButton" href="#">Help</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EMPTY STATE ================= -->
+    <section class="preview-section">
+      <h2>Empty state — when a site has no cookies</h2>
+      <div class="preview-popup">
+        <div id="wrapper">
+          <div id="siteHeader">
+            <div id="siteTitle">
+              <i class="fa fa-globe"></i>
+              <span id="siteHostname">fresh-site.dev</span>
+            </div>
+            <div id="siteStats">
+              <span class="stat-chip" id="statTotal"><b>0</b>cookies</span>
+              <span class="stat-chip stat-protected" id="statProtected" style="display: none"><b>0</b>protected</span>
+            </div>
+          </div>
+          <div id="noCookies" style="display: block">
+            <div class="empty-icon"><i class="fa fa-inbox"></i></div>
+            <div class="empty-title">No cookies found for this site</div>
+            <div class="empty-desc">
+              You can still manage this site's cookies manually.
+            </div>
+            <div class="empty-steps">
+              <div class="empty-step">
+                <i class="fa fa-plus"></i><span>Add a new cookie</span>
+              </div>
+              <div class="empty-step">
+                <i class="fa fa-sign-in"></i><span>Paste cookies from JSON</span>
+              </div>
+              <div class="empty-step">
+                <i class="fa fa-search"></i><span>Search other sites</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= OPTIONS ================= -->
+    <section class="preview-section">
+      <h2>Options — User preferences</h2>
+      <div class="preview-options">
+        <div id="navigation">
+          <h1>EditThisCookie</h1>
+          <ul>
+            <li class="chooser" id="getting_started"><span>Getting started</span><span class="nav-desc">Quick tour &amp; usage guide</span></li>
+            <li class="chooser selected" id="user_preferences"><span>Options</span><span class="nav-desc">Tweak how the extension behaves</span></li>
+            <li class="chooser" id="block_rules"><span>Blocked cookies</span><span class="nav-desc">Block sites from setting cookies</span></li>
+            <li class="chooser" id="readonly_rules"><span>Protected cookies</span><span class="nav-desc">Protect cookies from edits</span></li>
+          </ul>
+        </div>
+        <div id="options-box" class="box">
+          <h1>Options</h1>
+          <hr />
+          <div class="formLine">
+            <input type="checkbox" class="checkbox" id="showAlerts" checked />
+            <label for="showAlerts" class="formLabel">Show alert dialogs</label>
+          </div>
+          <div class="formLine">
+            <input type="checkbox" class="checkbox" id="showCommandsLabels" />
+            <label for="showCommandsLabels" class="formLabel"
+              >Show command labels</label
+            >
+          </div>
+          <div class="formLine">
+            <input type="checkbox" class="checkbox" id="refreshAfterSubmit" checked />
+            <label for="refreshAfterSubmit" class="formLabel"
+              >Reload tab after changes</label
+            >
+          </div>
+          <div class="formLine">
+            <input type="checkbox" class="checkbox" id="skipCacheRefresh" />
+            <label for="skipCacheRefresh" class="formLabel"
+              >Skip cache on reload</label
+            >
+          </div>
+          <div class="formLine">
+            <span class="ui-icon ui-icon-minus"></span>
+            <label for="sortCookiesType" class="formLabel">Sort cookies</label>
+            <select id="sortCookiesType">
+              <option value="domain_alpha">Sort by domain (alphabetical)</option>
+              <option value="alpha">Sort alphabetically</option>
+            </select>
+          </div>
+          <div class="formLine">
+            <span class="ui-icon ui-icon-minus"></span>
+            <label for="copyCookiesType" class="formLabel"
+              >Copy cookies type</label
+            >
+            <select id="copyCookiesType">
+              <option value="json">JSON</option>
+              <option value="netscape">Netscape HTTP Cookie File</option>
+              <option value="semicolonPairs"
+                >Semicolon separated name=value pairs</option
+              >
+              <option value="lpw">Perl::LWP</option>
+            </select>
+          </div>
+          <div class="formLine" id="maxDateContainer">
+            <span class="ui-icon ui-icon-minus"></span>
+            <label for="maxDate" class="formLabel">Maximum date</label>
+            <input type="text" id="maxDate" value="1" size="5" />
+            <div id="maxDateType">
+              <input type="radio" id="radioHour" name="radioMaxDate" value="3600" />
+              <label for="radioHour">hour</label>
+              <input type="radio" id="radioDay" name="radioMaxDate" value="8640" />
+              <label for="radioDay">day</label>
+              <input
+                type="radio"
+                id="radioMonth"
+                name="radioMaxDate"
+                value="2592000"
+                checked
+              />
+              <label for="radioMonth">month</label>
+              <input type="radio" id="radioYear" name="radioMaxDate" value="31104000" />
+              <label for="radioYear">year</label>
+            </div>
+            <div id="saveMaxDateButton">Save</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RULES ================= -->
+    <section class="preview-section">
+      <h2>Options — Blocked cookies</h2>
+      <div class="preview-rules">
+        <div id="rules-box" class="box">
+          <h1>Blocked cookies</h1>
+          <hr />
+          <div id="addRule" class="button"><i class="fa fa-plus"></i> Flag a cookie</div>
+          <div class="table">
+            <div class="table_row header">
+              <div style="padding-left: 42px">Domain</div>
+              <div>Name</div>
+              <div>Value</div>
+            </div>
+            <div class="table_row data_row" index="0">
+              <div class="domain_field">.example.com</div>
+              <div class="name_field">bbsessionhash</div>
+              <div class="value_field">99b3123f5asads0f1d2f246a869</div>
+            </div>
+            <div class="table_row data_row" index="1">
+              <div class="domain_field">.ads.tracker.net</div>
+              <div class="name_field">uid</div>
+              <div class="value_field">any</div>
+            </div>
+            <div class="table_row data_row" index="2">
+              <div class="domain_field">.analytics.com</div>
+              <div class="name_field">_gid</div>
+              <div class="value_field">any</div>
+            </div>
+          </div>
+          <div class="operations">
+            <span class="cmd_delete"><i class="fa fa-trash-o"></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SUPPORT ================= -->
+    <section class="preview-section">
+      <h2>Options — Support</h2>
+      <div class="preview-support">
+        <div id="support-box" class="box">
+          <div class="linkify">
+            <i style="color: #ff9d00; font-size: 2.6em" class="fa fa-star fa-fw"></i>
+            <div>
+              <div class="section-title">Rate EditThisCookie</div>
+              <span
+                >Enjoying the extension? Leave us a review on the Chrome Web
+                Store.</span
+              >
+            </div>
+          </div>
+          <div class="linkify">
+            <i style="color: #8820bd; font-size: 2.6em" class="fa fa-comment fa-fw"></i>
+            <div>
+              <div class="section-title">Translation</div>
+              <span>Help translate EditThisCookie into your language.</span>
+            </div>
+          </div>
+          <div class="linkify">
+            <i style="color: #00d6c1; font-size: 2.6em" class="fa fa-bug fa-fw"></i>
+            <div>
+              <div class="section-title">Bugs &amp; feature requests</div>
+              <span>Found a bug or want a feature? Tell us on GitHub.</span>
+            </div>
+          </div>
+          <div class="linkify">
+            <i style="color: #25bd20; font-size: 2.6em" class="fa fa-code fa-fw"></i>
+            <div>
+              <div class="section-title">Source code</div>
+              <span>Fork and contribute on GitHub.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="/lib/jquery-3.3.1.min.js"></script>
+    <script src="/lib/jquery-ui-1.12.1.custom.min.js"></script>
+    <script src="/lib/uniform/jquery.uniform.js"></script>
+    <script>
+      $(function () {
+        $("#cookiesList").accordion({
+          collapsible: true,
+          heightStyle: "content",
+          active: 2,
+        });
+        $(".preview-popup input:checkbox").uniform();
+        $(".preview-options input:checkbox, .preview-options select").uniform();
+        $("#maxDateType").buttonset();
+        $("#saveMaxDateButton").button();
+        $("#addRule").button();
+        $("#rules-box #submitButton").button();
+
+        // mimic popup.js: show the first-run hint
+        $("#firstRunBanner").css("display", "flex");
+
+        if (location.search.indexOf("probe=1") !== -1) {
+          setTimeout(function () {
+            var els = {
+              "popup body bg": document.body,
+              "site header": document.querySelector("#siteHeader"),
+              "stat chip": document.querySelector(".stat-chip"),
+              "first-run banner": document.querySelector("#firstRunBanner"),
+              "toolbar": document.querySelector(".commands-table"),
+              "toolbar btn label": document.querySelector(".commands-row-texy a span"),
+              "url pill": document.querySelector(".searchCondition"),
+              "cookie header (collapsed)": document.querySelectorAll("#cookiesList .ui-accordion-header")[0],
+              "cookie header (active)": document.querySelectorAll("#cookiesList .ui-accordion-header")[2],
+              "expanded content": document.querySelectorAll("#cookiesList .ui-accordion-content")[2],
+              "vertical chip": document.querySelector("#cookiesList .vertical-commands-row a"),
+              "value textarea": document.querySelector("#cookiesList textarea.value"),
+              "uniform checkbox": document.querySelector(".preview-popup .checker"),
+              "uniform checked": document.querySelector(".preview-popup .checker .checked"),
+              "uniform select": document.querySelector(".preview-options .selector"),
+              "buttonset active": document.querySelector(".preview-options .ui-button.ui-state-active"),
+              "save button": document.querySelector("#saveMaxDateButton"),
+              "add rule": document.querySelector("#addRule"),
+              "nav": document.querySelector("#navigation"),
+              "nav selected": document.querySelector("#navigation li.selected"),
+              "table": document.querySelector(".preview-rules .table"),
+              "support card": document.querySelector(".linkify"),
+              "alert box": document.querySelector("#alert_box"),
+              "submit button": document.querySelector("#submitButton"),
+            };
+            var out = [];
+            for (var k in els) {
+              var el = els[k];
+              if (!el) { out.push(k + ": MISSING"); continue; }
+              var cs = getComputedStyle(el);
+              var bg = cs.backgroundImage || "";
+              out.push(
+                k + ":\n  bg=" + cs.backgroundColor + " bgimg=" +
+                (bg.length > 90 ? bg.slice(0, 90) + "…" : bg) +
+                " blur=" + cs.backdropFilter +
+                " radius=" + cs.borderRadius + " border=" + cs.borderColor +
+                " color=" + cs.color + " shadow=" + (cs.boxShadow !== "none") +
+                " font=" + cs.fontSize + " display=" + cs.display +
+                " pos=" + cs.position + " padL=" + cs.paddingLeft
+              );
+            }
+            var pre = document.createElement("pre");
+            pre.textContent = out.join("\n");
+            pre.style.cssText = "position:fixed;left:8px;bottom:8px;z-index:99999;background:#fff;border:1px solid #ccc;padding:8px;font:11px monospace;max-height:50vh;overflow:auto;white-space:pre-wrap;width:60%;";
+            document.body.appendChild(pre);
+          }, 400);
+        }
+      });
+    </script>
+  </body>
+</html>
